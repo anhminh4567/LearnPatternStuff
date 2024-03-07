@@ -1,0 +1,38 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div>
+      <button class="btn btn-primary" id="sendButton">Send Data</button>
+</div>
+@section Scripts{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:7231/SignalR") 
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+      connection.start().catch(err => console.error(err.toString()));
+
+      // Add event listener to the button
+      document.getElementById("sendButton").addEventListener("click", function () {
+      connection.invoke("SendAsync", "Client Called")
+          .catch(err => console.error(err.toString()));
+      });
+
+      // Optionally, you can listen for incoming messages from the server
+      connection.on("ReceiveFromServer", function (message) {
+        console.log("Received message from server:", message);
+        // Do something with the received message
+      });
+    });
+ </script>
+  <script src="~/lib/SignalR/signalr.min.js"></script>
+}
+

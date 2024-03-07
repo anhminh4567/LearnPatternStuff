@@ -1,0 +1,30 @@
+﻿@page
+@model TestConceptPattern.Pages.BlogsModel
+@{
+	
+
+}
+<form method="post">
+	<div id="articleContent" >
+            <!-- Dynamic content will be appended here -->
+        </div>
+        <button type="button" onclick="addTextField()">Add Text Field</button>
+        <button type="button" onclick="addImageField()">Add Image Upload</button>
+        <input type="submit" value="Publish Article" />
+</form>
+@section Scripts{
+<script>
+        function addTextField() {
+            var div = document.createElement('div');
+            div.innerHTML = '<input type="text" name="TextContents" />';
+            document.getElementById('articleContent').appendChild(div);
+        }
+
+        function addImageField() {
+            var div = document.createElement('div');
+            div.innerHTML = '<input type="file" name="ImageContents" accept="*/*" />';
+            document.getElementById('articleContent').appendChild(div);
+        }
+    </script>
+}
+
