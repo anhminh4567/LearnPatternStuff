@@ -74,7 +74,7 @@ jobs:
     - name: end 
       run: | 
         echo "finish"
-        echo "value for artifact name is: ${{ needs.build.outputs.artifact_name }}"
+        echo "value for artifact name is: ${{ needs.build.outputs.artifact_name_final }}"
       
         
 
