@@ -54,5 +54,21 @@ jobs:
         name: learnPatternStuffArtifact-${{ github.run_number }}
         path: ${{ env.PUBLISH_OUTPUT_DIRECTORY }}
         overwrite: true
+  deploy:
+    needs: [build]
+    runs-on: self-hosted
+    env:
+      DEPLOYMENT_PATH: 'E:\DEPLOYMENT\GITHUB'
+    steps:
+    - name: validate if directory can be accessed and create a dummy file
+    - run: |
+        if(Test-Path $env:DEPLOYMENT_PATH){
+          echo "path exist, no need to create"
+        }else{
+          mkdir $env:DEPLOYMENT_PATH
+          echo "created
+        }
+        cd "E:\DEPLOYMENT\GITHUB"
+        pwd
 
     
