@@ -15,7 +15,7 @@ jobs:
     env:
       ARTIFACT_NAME: 'learnPatternStuffArtifact'
     outputs:
-      artifact_name_final: ${{ steps.outputing_final.artifact_name }}
+      artifact_name_final: ${{ steps.outputing_final.outputs.artifact_name_final }}
     steps:
     - uses: actions/checkout@v4
     - name: Print dotnet version and check if build directory exist to create
@@ -52,7 +52,7 @@ jobs:
       id: outputing_final        
       run: |
         echo "artifact_name is ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}"
-        "artifact_name_final=${{ env.ARTIFACT_NAME }}-${{ github.run_number }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        echo "artifact_name_final=${{ env.ARTIFACT_NAME }}-${{ github.run_number }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         
       
   deploy:
