@@ -52,7 +52,7 @@ jobs:
       id: outputing_final        
       run: |
         echo "artifact_name is ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}"
-        "artifact_name=${{ env.ARTIFACT_NAME }}-${{ github.run_number }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        "artifact_name_final=${{ env.ARTIFACT_NAME }}-${{ github.run_number }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         
       
   deploy:
