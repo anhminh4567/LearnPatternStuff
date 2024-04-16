@@ -5,7 +5,7 @@ name: .NET
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" , "main-demo" ]
   pull_request:
     branches: [ "main" ]
 
@@ -22,13 +22,24 @@ jobs:
 #   uses: actions/setup-dotnet@v4
 #   with:
 #     dotnet-version: 7.0.x
-    - name: Print dotnet version
-      run : dotnet --version
+    - name: Print dotnet version and check if build directory exist to create
+      run : |
+        dotnet --version
+        $buildPath = Join-Path $env:GITHUB_WORKSPACE "buildDirectory"
+        echo "check if this path exist: $buildPath"
+        if (Test-Path $buildPath){
+          echo "build path exist no need to create"
+        }else{
+          echo "create new path"
+          mkdir $buildPath
+        }
+        echo "BUILD_OUTPUT_DIRECTORY=$buildPath" >> $GITHUB_ENV
     - name: print some variable
       run: |
         echo "github workspace: $env:GITHUB_WORKSPACE"
+        echo "output of build directory: $env:BUILD_OUTPUT_DIRECTORY"
         echo "finsih printing"
-          
+         
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
