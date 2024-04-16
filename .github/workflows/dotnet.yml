@@ -25,28 +25,28 @@ jobs:
     - name: Print dotnet version and check if build directory exist to create
       run : |
         dotnet --version
-        $buildPath = Join-Path $env:GITHUB_WORKSPACE "buildPath"
-        echo "check if this path exist: $buildPath"
-        if (Test-Path $buildPath){
+        $publishPath = Join-Path $env:GITHUB_WORKSPACE "publishPath"
+        echo "check if this path exist: $publishPath"
+        if (Test-Path $publishPath){
           echo "publishPath exist no need to create"
         }else{
           echo "create new path"
-          mkdir $buildPath
+          mkdir $publishPath
         }
-        "BUILD_OUTPUT_DIRECTORY=$buildPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "PUBLISH_OUTPUT_DIRECTORY=$publishPath" | Out-File -FilePath $env:GITHUB_ENV -Append
     - name: print some variable
       run: |
         echo "github workspace: $env:GITHUB_WORKSPACE"
-        echo "output of build directory: $env:BUILD_OUTPUT_DIRECTORY"
+        echo "output of build directory: $env:PUBLISH_OUTPUT_DIRECTORY"
         echo "finish printing"
          
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --output $env:BUILD_OUTPUT_DIRECTORY
+      run: dotnet build --no-restore
 # - name: Test
 #   run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish --no-build --output publishDirectory
+      run: dotnet publish --no-build --output $env:PUBLISH_OUTPUT_DIRECTORY
 
     
