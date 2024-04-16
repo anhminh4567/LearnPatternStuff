@@ -12,16 +12,12 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-    
+    env:
+      ARTIFACT_NAME: 'learnPatternStuffArtifact'
+    outputs:
+      artifact_name_final: ${{ steps.outputing_final.artifact_name }}
     steps:
     - uses: actions/checkout@v4
-# this currently not necessary on my machine, sdk is already downloaded, and if try to setup, it will ask for administrator permission
-# or i have to add it to a group that have permission to dotnet folder, very risky, im new to security and permission stuff, might
-# be for later use
-# - name: Setup .NET
-#   uses: actions/setup-dotnet@v4
-#   with:
-#     dotnet-version: 7.0.x
     - name: Print dotnet version and check if build directory exist to create
       run : |
         dotnet --version
@@ -44,21 +40,27 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-# - name: Test
-#   run: dotnet test --no-build --verbosity normal
     - name: Publish
       run: dotnet publish --no-build --output $env:PUBLISH_OUTPUT_DIRECTORY
     - name: upload artifact, in this case, a zip or rar file
       uses: actions/upload-artifact@v4.3.1
       with:
-        name: learnPatternStuffArtifact-${{ github.run_number }}
+        name: ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}
         path: ${{ env.PUBLISH_OUTPUT_DIRECTORY }}
         overwrite: true
+    - name: Outputing any possible value
+      id: outputing_final        
+      run: |
+        echo "artifact_name is ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}"
+        "artifact_name=${{ env.ARTIFACT_NAME }}-${{ github.run_number }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        
+      
   deploy:
     needs: [build]
     runs-on: self-hosted
     env:
       DEPLOYMENT_PATH: 'E:\DEPLOYMENT\GITHUB'
+      ARTIFACT_NAME: ${{ needs.build.outputs.artifact_name }}
     steps:
     - name: validate if directory can be accessed and create a dummy file
       run : |
@@ -71,7 +73,10 @@ jobs:
         cd "E:\DEPLOYMENT\GITHUB"
         pwd
     - name: end 
-      run: echo "finish"
+      run: | 
+        echo "finish"
+        echo "value for artifact name is: ${{ env.ARTIFACT_NAME }}"
+      
         
 
     
