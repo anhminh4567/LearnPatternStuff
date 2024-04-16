@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: self-hosted
     
     steps:
@@ -27,8 +26,8 @@ jobs:
       run : dotnet --version
     - name: Print some variable
     - run: |
-        echo $GITHUB_ENV
-        echo $GITHUB_WORKSPACE
+        $GITHUB_ENV
+        $GITHUB_WORKSPACE
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -37,9 +36,5 @@ jobs:
     #   run: dotnet test --no-build --verbosity normal
     - name: Publish
       run: dotnet publish --no-build
-    # - name: Upload a Build Artifact
-    #   uses: actions/upload-artifact@v4.3.1
-    #   with:
-    #     name: buildArtifact
-    #     path: 
+
     
