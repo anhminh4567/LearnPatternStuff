@@ -24,7 +24,10 @@ jobs:
 #     dotnet-version: 7.0.x
     - name: Print dotnet version
       run : dotnet --version
-    
+    - name: print some variable
+      run: |
+        echo "github workspace: $env:GITHUB_WORKSPACE"
+        echo "finsih printing"
           
     - name: Restore dependencies
       run: dotnet restore
