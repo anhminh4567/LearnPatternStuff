@@ -66,7 +66,7 @@ jobs:
           echo "path exist, no need to create"
         }else{
           mkdir $env:DEPLOYMENT_PATH
-          echo "created
+          echo "created"
         }
         cd "E:\DEPLOYMENT\GITHUB"
         pwd
