@@ -5,37 +5,77 @@ name: .NET
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" , "main-demo" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
     runs-on: self-hosted
-    
+    env:
+      ARTIFACT_NAME: 'learnPatternStuffArtifact'
+    outputs:
+      artifact_name_final: ${{ steps.outputing_final.outputs.artifact_name_final }}
     steps:
     - uses: actions/checkout@v4
-# this currently not necessary on my machine, sdk is already downloaded, and if try to setup, it will ask for administrator permission
-# or i have to add it to a group that have permission to dotnet folder, very risky, im new to security and permission stuff, might
-# be for later use
-# - name: Setup .NET
-#   uses: actions/setup-dotnet@v4
-#   with:
-#     dotnet-version: 7.0.x
-    - name: Print dotnet version
-      run : dotnet --version
+    - name: Print dotnet version and check if build directory exist to create
+      run : |
+        dotnet --version
+        $publishPath = Join-Path $env:GITHUB_WORKSPACE "publishPath"
+        echo "check if this path exist: $publishPath"
+        if (Test-Path $publishPath){
+          echo "publishPath exist no need to create"
+        }else{
+          echo "create new path"
+          mkdir $publishPath
+        }
+        "PUBLISH_OUTPUT_DIRECTORY=$publishPath" | Out-File -FilePath $env:GITHUB_ENV -Append
     - name: print some variable
       run: |
         echo "github workspace: $env:GITHUB_WORKSPACE"
-        echo "finsih printing"
-          
+        echo "output of build directory: $env:PUBLISH_OUTPUT_DIRECTORY"
+        echo "finish printing"
+         
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-# - name: Test
-#   run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish --no-build
+      run: dotnet publish --no-build --output $env:PUBLISH_OUTPUT_DIRECTORY
+    - name: upload artifact, in this case, a zip or rar file
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}
+        path: ${{ env.PUBLISH_OUTPUT_DIRECTORY }}
+        overwrite: true
+    - name: Outputing any possible value
+      id: outputing_final        
+      run: |
+        echo "artifact_name is ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}"
+        echo "artifact_name_final=${{ env.ARTIFACT_NAME }}-${{ github.run_number }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        
+      
+  deploy:
+    needs: [build]
+    runs-on: self-hosted
+    env:
+      DEPLOYMENT_PATH: 'E:\DEPLOYMENT\GITHUB'
+    steps:
+    - name: validate if directory can be accessed and create a dummy file
+      run : |
+        if(Test-Path $env:DEPLOYMENT_PATH){
+          echo "path exist, no need to create"
+        }else{
+          mkdir $env:DEPLOYMENT_PATH
+          echo "created"
+        }
+        cd "E:\DEPLOYMENT\GITHUB"
+        pwd
+    - name: end 
+      run: | 
+        echo "finish"
+        echo "value for artifact name is: ${{ needs.build.outputs.artifact_name_final }}"
+      
+        
 
     
