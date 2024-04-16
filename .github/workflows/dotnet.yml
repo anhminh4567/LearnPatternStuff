@@ -48,5 +48,11 @@ jobs:
 #   run: dotnet test --no-build --verbosity normal
     - name: Publish
       run: dotnet publish --no-build --output $env:PUBLISH_OUTPUT_DIRECTORY
+    - name: upload artifact, in this case, a zip or rar file
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: learnPatternStuffArtifact
+        path: ${{ env.PUBLISH_OUTPUT_DIRECTORY }}
+        overwrite: true
 
     
