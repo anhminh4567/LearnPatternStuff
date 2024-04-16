@@ -33,7 +33,7 @@ jobs:
           echo "create new path"
           mkdir $publishPath
         }
-        "PUBLISH_OUTPUT_DIRECTORY=$publishPath" | Out-File -File-Path $env:GITHUB_ENV -Append
+        "PUBLISH_OUTPUT_DIRECTORY=$publishPath" | Out-File -FilePath $env:GITHUB_ENV -Append
     - name: print some variable
       run: |
         echo "github workspace: $env:GITHUB_WORKSPACE"
