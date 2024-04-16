@@ -70,5 +70,8 @@ jobs:
         }
         cd "E:\DEPLOYMENT\GITHUB"
         pwd
+    - name: end 
+    - run: echo "finish"
+        
 
     
