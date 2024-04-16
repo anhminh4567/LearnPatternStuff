@@ -60,11 +60,7 @@ jobs:
     env:
       DEPLOYMENT_PATH: 'E:\DEPLOYMENT\GITHUB'
     steps:
-    - name: validate if directory can be accessed and create a dummy file
-    - run : |
-        dotnet --version
-        echo "yea stuff work"
-        
+ 
     - name: end 
     - run: echo "finish"
         
