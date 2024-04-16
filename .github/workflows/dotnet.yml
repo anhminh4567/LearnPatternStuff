@@ -60,7 +60,6 @@ jobs:
     runs-on: self-hosted
     env:
       DEPLOYMENT_PATH: 'E:\DEPLOYMENT\GITHUB'
-      ARTIFACT_NAME: ${{ needs.build.outputs.artifact_name }}
     steps:
     - name: validate if directory can be accessed and create a dummy file
       run : |
@@ -75,7 +74,7 @@ jobs:
     - name: end 
       run: | 
         echo "finish"
-        echo "value for artifact name is: ${{ env.ARTIFACT_NAME }}"
+        echo "value for artifact name is: ${{ needs.build.outputs.artifact_name }}"
       
         
 
