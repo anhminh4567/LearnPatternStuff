@@ -14,27 +14,27 @@ jobs:
     runs-on: self-hosted
     
     steps:
-    - uses: actions/checkout@v4
-    # this currently not necessary on my machine, sdk is already downloaded, and if try to setup, it will ask for administrator permission
-    # or i have to add it to a group that have permission to dotnet folder, very risky, im new to security and permission stuff, might
-    # be for later use
-    # - name: Setup .NET
-    #   uses: actions/setup-dotnet@v4
-    #   with:
-    #     dotnet-version: 7.0.x
-    - name: Print dotnet version
-      run : dotnet --version
-    - name: Print some variable
-    - run: |
-        $GITHUB_ENV
-        $GITHUB_WORKSPACE
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    # - name: Test
-    #   run: dotnet test --no-build --verbosity normal
-    - name: Publish
-      run: dotnet publish --no-build
+      - uses: actions/checkout@v4
+      # this currently not necessary on my machine, sdk is already downloaded, and if try to setup, it will ask for administrator permission
+      # or i have to add it to a group that have permission to dotnet folder, very risky, im new to security and permission stuff, might
+      # be for later use
+      # - name: Setup .NET
+      #   uses: actions/setup-dotnet@v4
+      #   with:
+      #     dotnet-version: 7.0.x
+      - name: Print dotnet version
+        run : dotnet --version
+      - name: Print some variable
+      - run: |
+          echo "$GITHUB_ENV"
+          echoe "current workspace: ${{ GITHUB_WORKSPACE }}"
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      # - name: Test
+      #   run: dotnet test --no-build --verbosity normal
+      - name: Publish
+        run: dotnet publish --no-build
 
     
