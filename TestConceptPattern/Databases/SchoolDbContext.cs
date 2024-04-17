@@ -21,10 +21,12 @@ namespace TestConceptPattern.Databases
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);
-			optionsBuilder.UseSqlServer("server =(local);uid=sa;pwd=12345;Database=LearnCSharpEFCore;TrustServerCertificate=true;");
-		}
+//			optionsBuilder.UseSqlServer("server =(local);uid=sa;pwd=12345;Database=LearnCSharpEFCore;TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("server=localhost,7878;uid=SA;pwd=Supermarcy@2003;Database=LearnCSharpEFCore;TrustServerCertificate=true;");
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Student>(s => 
 			{
