@@ -42,12 +42,12 @@ jobs:
             $IsBranchExist = $false
             echo "branch exists: "$IsBranchExist
           }
+          $env:IS_BRANCH_EXISTS = $IsBranchExist
       - name: Output result
         run: | 
-          echo "value from previous check: "$IsBranchExist
-          if($IsBranchExist){
-            $IS_BRANCH_EXISTS = $IsBranchExist 
-            $IS_BRANCH_EXISTS | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          echo "value from previous check: "$env:IS_BRANCH_EXISTS
+          if($env:IS_BRANCH_EXISTS){
+            $env:IS_BRANCH_EXISTS | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           }else{
             exit 1
           }
