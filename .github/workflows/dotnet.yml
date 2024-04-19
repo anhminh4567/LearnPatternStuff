@@ -35,7 +35,7 @@ jobs:
           echo "check if the user input for branch is correct, the user input is ${{ inputs.branch_name }} "
           $RemoteBranchQueryResult = git ls-remote ${{ env.REMOTE_NAME }} refs/heads/${{ inputs.branch_name }} 
           $IsBranchExist = $false
-          if($RemoteBranchQueryResult -match ${{ inputs.branch_name}} ){
+          if($RemoteBranchQueryResult -contain "refs/heads/${{ inputs.branch_name}}" ){
             $IsBranchExist = $true
             echo "branch exists: "$IsBranchExist
           }else{
