@@ -44,6 +44,7 @@ jobs:
           }
       - name: Output result
         run: | 
+          echo "value from previous check: "$IsBranchExist
           if($IsBranchExist){
             $IS_BRANCH_EXISTS = $IsBranchExist 
             $IS_BRANCH_EXISTS | Out-File -FilePath $env:GITHUB_OUTPUT -Append
@@ -53,7 +54,7 @@ jobs:
   build:
     runs-on: self-hosted
     needs: [validation]
-    if: ${{ needs.validation.outputs.IS_BRANCH_EXISTS }}
+    if: ${{ needs.validation.outputs.IS_BRANCH_EXISTS == 'True' }}
     env:
       ARTIFACT_NAME: 'learnPatternStuffArtifact'
     outputs:
