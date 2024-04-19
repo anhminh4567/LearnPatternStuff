@@ -134,6 +134,7 @@ jobs:
       uses: docker/build-push-action@v5.3.0
       with:
         context: .
+        file: ./TestConceptPattern/Dockerfile
         tags: ${{ secrets.DOCKER_USERNAME }}/cicd_artifact:run_no_${{ github.run_number }}
         
 
