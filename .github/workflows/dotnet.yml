@@ -45,7 +45,7 @@ jobs:
       - name: Output result
         run: | 
           if($IsBranchExist){
-            $IS_BRANCH_EXISTS = IsBranchExist 
+            $IS_BRANCH_EXISTS = $IsBranchExist 
             $IS_BRANCH_EXISTS | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           }else{
             exit 1
