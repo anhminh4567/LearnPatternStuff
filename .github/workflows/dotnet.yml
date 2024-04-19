@@ -5,13 +5,36 @@ name: .NET
 
 on:
   push:
-    branches: [ "main" , "main-demo" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+  workflow_dispatch:
+    inputs:
+      branch_name: 
+        required: true
+        description: 'provide the branch name to begin'
+        type: text 
+      environment_to_deploy:
+        required: true
+        description: 'provide the environement to deploy, dev or production or test'
+        type: choice 
+        options:
+          - 'Development'
+          - 'Staging'
+          - 'Productionp'
 jobs:
+  validation:
+    runs-on: self-hosted
+    steps:
+      - name: check if branch user input exist
+      - run: |
+          pwd
+          echo "check if the user input for branch is correct, the user input is ${{ inputs.branch_name }} "
+          git remote -v
+          git ls-remote
   build:
     runs-on: self-hosted
+    needs: [validation]
     env:
       ARTIFACT_NAME: 'learnPatternStuffArtifact'
     outputs:
@@ -75,7 +98,12 @@ jobs:
       run: | 
         echo "finish"
         echo "value for artifact name is: ${{ needs.build.outputs.artifact_name_final }}"
-      
+    # - name: Docker Login
+    #   uses: docker/login-action@v3.1.0
+    #   with:
+    #     username:
+    #     password:
+        
         
 
     
