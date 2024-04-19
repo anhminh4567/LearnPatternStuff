@@ -42,7 +42,7 @@ jobs:
             $IsBranchExist = $false
             echo "branch exists: "$IsBranchExist
           }
-          $env:IS_BRANCH_EXISTS = $IsBranchExist
+          "IS_BRANCH_EXISTS=$IsBranchExist" | Out-File -FilePath $env:GITHUB_ENV -Append
       - name: Output result
         run: | 
           echo "value from previous check: "$env:IS_BRANCH_EXISTS
