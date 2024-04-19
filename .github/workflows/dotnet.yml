@@ -25,16 +25,31 @@ on:
 jobs:
   validation:
     runs-on: self-hosted
+    env:
+      REMOTE_NAME: origin
+    outputs:
+      IS_BRANCH_EXISTS: ${{ steps.OUTPUT_RESULT.outputs.IS_BRANCH_EXISTS }}
     steps:
       - name: check if branch user input exist
         run : |
-          pwd
           echo "check if the user input for branch is correct, the user input is ${{ inputs.branch_name }} "
-          git remote -v
-          git ls-remote
+          $RemoteBranchQueryResult = git ls-remote ${{ env.REMOTE_NAME }} refs/heads/${{ inputs.branch_name }} 
+          $IsBranchExist = $false
+          if($RemoteBranchQueryResult -match ${{ inputs.branch_name}} ){
+            $IsBranchExist = $true
+            echo "branch exists: "$IsBranchExist
+          }else{
+            $IsBranchExist = $false
+            echo "branch exists: "$IsBranchExist
+          }
+      - name: Output result
+        run: | 
+          $IS_BRANCH_EXISTS = $IsBranchExist 
+          $IS_BRANCH_EXISTS | Out-File -FilePath $env:GITHUB_OUTPUT -Append
   build:
     runs-on: self-hosted
     needs: [validation]
+    if: ${{ needs.validation.outputs.IS_BRANCH_EXISTS }}
     env:
       ARTIFACT_NAME: 'learnPatternStuffArtifact'
     outputs:
