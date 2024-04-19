@@ -44,8 +44,12 @@ jobs:
           }
       - name: Output result
         run: | 
-          $IS_BRANCH_EXISTS = $IsBranchExist 
-          $IS_BRANCH_EXISTS | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          if($IsBranchExist){
+            $IS_BRANCH_EXISTS = IsBranchExist 
+            $IS_BRANCH_EXISTS | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          }else{
+            exit 1
+          }
   build:
     runs-on: self-hosted
     needs: [validation]
