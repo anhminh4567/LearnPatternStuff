@@ -27,7 +27,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: check if branch user input exist
-      - run: |
+        run : |
           pwd
           echo "check if the user input for branch is correct, the user input is ${{ inputs.branch_name }} "
           git remote -v
