@@ -135,6 +135,7 @@ jobs:
       with:
         context: .
         file: ./TestConceptPattern/Dockerfile
+        push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/cicd_artifact:run_no_${{ github.run_number }}
         
 
