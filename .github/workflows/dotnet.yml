@@ -4,24 +4,32 @@
 name: .NET
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
   workflow_dispatch:
     inputs:
       branch_name: 
         required: true
         description: 'provide the branch name to begin'
         type: text 
+        default: empty
       environment_to_deploy:
         required: true
         description: 'provide the environement to deploy, dev or production or test'
         type: choice 
         options:
           - 'Development'
-          - 'Staging'
-          - 'Productionp'
+          - 'Production'
+      deploy_or_not:
+        description: 'decide if the current workflow will run the deployment stage, default is false'
+        default: false
+        type: boolean
+      build_image_or_not:
+        description: 'decide to build a new image or not or just build to test if success or not'
+        type: boolean
+        default: false
 jobs:
   validation:
     runs-on: self-hosted
@@ -29,9 +37,17 @@ jobs:
       REMOTE_NAME: origin
     outputs:
       IS_BRANCH_EXISTS: ${{ steps.OUTPUT_RESULT.outputs.IS_BRANCH_EXISTS }}
+      BRANCH_NAME: ${{ steps.OUTPUT_RESULT.outputs.BRANCH_NAME }} 
+      
     steps:
       - name: check if branch user input exist
         run : |
+          echo "check which even trigger this run, if it is a manual trigger, then okk run check, else it is already correct, no need to check"
+          echo "currently trigger event is: ${{ github.event_name }}
+          if( "${{ github.event_name }}" -ne "workflow_dispatch" ){
+            exit 0
+          }
+          
           echo "check if the user input for branch is correct, the user input is ${{ inputs.branch_name }}"
           $RemoteBranchQueryResult = git ls-remote ${{ env.REMOTE_NAME }} refs/heads/${{ inputs.branch_name }} 
           $IsBranchExist = $false
@@ -49,19 +65,26 @@ jobs:
           echo "value from previous check: $env:IS_BRANCH_EXISTS"
           if($env:IS_BRANCH_EXISTS){
             "IS_BRANCH_EXISTS=$env:IS_BRANCH_EXISTS" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            "BRANCH_NAME=${{ inputs.branch_name }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           }else{
             exit 1
           }
   build:
     runs-on: self-hosted
     needs: [validation]
-    if: ${{ needs.validation.outputs.IS_BRANCH_EXISTS == 'True' }}
+    # dont need this, if the previous step fail, then why need to check condtion then ??
+    # if: ${{ needs.validation.outputs.IS_BRANCH_EXISTS == 'True' }}
     env:
       ARTIFACT_NAME: 'learnPatternStuffArtifact'
     outputs:
       artifact_name_final: ${{ steps.outputing_final.outputs.artifact_name_final }}
     steps:
     - uses: actions/checkout@v4
+      if: ${{ github.event_name != 'workflow_dispatch' }}
+    - uses: actions/checkout@v4
+      if: ${{ github.event_name == 'workflow_dispatch' }}
+      with:
+        ref: ${{ needs.validation.outputs.BRANCH_NAME }}
     - name: Print dotnet version and check if build directory exist to create
       run : |
         dotnet --version
@@ -102,6 +125,8 @@ jobs:
   deploy:
     needs: [build]
     runs-on: self-hosted
+    if: ${{ inputs.deploy_or_not }}
+    environment: ${{ inputs.environment_to_deploy }} 
     env:
       DEPLOYMENT_PATH: 'E:\DEPLOYMENT\GITHUB'
     steps:
@@ -119,24 +144,17 @@ jobs:
       run: | 
         echo "value for artifact name is: ${{ needs.build.outputs.artifact_name_final }}"
         echo "docker username is: ${{ secrets.DOCKER_USERNAME }}"
-    # This step dont have to be done, since running on my local machine, which already have my creedential, but it is recommend
-    # to login as token, much safer, better scope control;
-    # - name: Docker Login
-    #   uses: docker/login-action@v3.1.0
-    #   with:
-    #     username: ${{ secrets.DOCKER_USERNAME }}
-    #     password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-    
-    # This step also dont need to, already have docker setting up on local machine
-    # - name: Docker Setup Buildx
-    #   uses: docker/setup-buildx-action@v3.3.0
+        echo "current environment is : ${{ vars.CURRENT_ENVIRONMENT }}"
+
     - name: Build and push Docker images
       uses: docker/build-push-action@v5.3.0
+      if: ${{ inputs.build_image_or_not }}
       with:
         context: .
         file: ./TestConceptPattern/Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/cicd_artifact:run_no_${{ github.run_number }}
+        tags: ${{ secrets.DOCKER_USERNAME }}/cicd_artifact_${{ vars.CURRENT_ENVIRONMENT }}:run_no_${{ github.run_number }}
+        
         
 
     
