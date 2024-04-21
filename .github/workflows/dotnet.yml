@@ -43,7 +43,7 @@ jobs:
       - name: check if branch user input exist
         run : |
           echo "check which even trigger this run, if it is a manual trigger, then okk run check, else it is already correct, no need to check"
-          echo "currently trigger event is: ${{ github.event_name }}
+          echo "currently trigger event is: ${{ github.event_name }}"
           if( "${{ github.event_name }}" -ne "workflow_dispatch" ){
             exit 0
           }
