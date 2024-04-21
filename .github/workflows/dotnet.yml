@@ -53,10 +53,10 @@ jobs:
           $IsBranchExist = $false
           if("$RemoteBranchQueryResult".Contains("refs/heads/${{ inputs.branch_name}}") ){
             $IsBranchExist = $true
-            echo "branch exists: "$IsBranchExist
+            echo "branch exists: $IsBranchExist"
           }else{
             $IsBranchExist = $false
-            echo "branch exists: "$IsBranchExist
+            echo "branch exists: $IsBranchExist"
           }
           "IS_BRANCH_EXISTS=$IsBranchExist" | Out-File -FilePath $env:GITHUB_ENV -Append
       - name: Output result
