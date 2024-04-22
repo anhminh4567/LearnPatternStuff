@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XunitTesting", "XunitTesting\XunitTesting.csproj", "{5988AB75-DFD3-40CC-8BFC-E08B8D453C58}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{BAECCA22-2486-43F5-9474-C0BC55D3D070}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5988AB75-DFD3-40CC-8BFC-E08B8D453C58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5988AB75-DFD3-40CC-8BFC-E08B8D453C58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5988AB75-DFD3-40CC-8BFC-E08B8D453C58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAECCA22-2486-43F5-9474-C0BC55D3D070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAECCA22-2486-43F5-9474-C0BC55D3D070}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAECCA22-2486-43F5-9474-C0BC55D3D070}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAECCA22-2486-43F5-9474-C0BC55D3D070}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
