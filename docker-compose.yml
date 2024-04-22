@@ -1,0 +1,41 @@
+version: '3.4'
+name: testing_docker_compose
+networks:
+  myapp_compose_network:
+
+volumes:
+  mydb_compose_volume:
+
+services:
+  mydb:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    container_name: "mydb_compose"
+    environment:
+      - "ACCEPT_EULA=Y" 
+      - "MSSQL_SA_PASSWORD=Supermarcy@2003" 
+    volumes:
+      - mydb_compose_volume:/var/opt/mssql
+    ports:
+      - "7878:1433"
+    networks: 
+      - myapp_compose_network
+  myapi:
+    image: testconceptpattern
+    container_name: "myapi_compose"
+    depends_on:
+      - mydb
+    environment:
+      - "MYAPP_SERVERNAME=mydb_compose"
+      - "MYAPP_UID=SA"
+      - "MYAPP_PWD=Supermarcy@2003"
+      - "MYAPP_DATABASE=LearnCSharpEFCore"
+    build:
+      context: .
+      dockerfile: TestConceptPattern/Dockerfile
+    ports:
+      - "7777:80"
+      #- "7778:443"
+    networks: 
+      - myapp_compose_network
+  
+
