@@ -104,7 +104,7 @@ jobs:
         echo "finish printing"
          
     - name: Restore dependencies
-      run: dotnet restore TestConceptPattern.sln
+      run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Publish
