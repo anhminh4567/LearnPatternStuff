@@ -120,7 +120,16 @@ jobs:
       run: |
         echo "artifact_name is ${{ env.ARTIFACT_NAME }}-${{ github.run_number }}"
         echo "artifact_name_final=${{ env.ARTIFACT_NAME }}-${{ github.run_number }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-        
+    
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v5.3.0
+      if: ${{ inputs.build_image_or_not }}
+      with:
+        context: .
+        file: ./TestConceptPattern/Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/cicd_artifact_${{ vars.CURRENT_ENVIRONMENT }}:run_no_${{ github.run_number }}
+    
       
   deploy:
     needs: [build]
@@ -145,19 +154,13 @@ jobs:
         echo "value for artifact name is: ${{ needs.build.outputs.artifact_name_final }}"
         echo "docker username is: ${{ secrets.DOCKER_USERNAME }}"
         echo "current environment is : ${{ vars.CURRENT_ENVIRONMENT }}"
-
-    - name: Build and push Docker images
-      uses: docker/build-push-action@v5.3.0
-      if: ${{ inputs.build_image_or_not }}
-      with:
-        context: .
-        file: ./TestConceptPattern/Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/cicd_artifact_${{ vars.CURRENT_ENVIRONMENT }}:run_no_${{ github.run_number }}
-
+        echo "path to ssh key: ${{ secrets.VM_SSH_KEY_PATH }}"
+        echo "vm address: ${{ secrets.VM_INSTANCE_ADDRESS }}"
+    
     - name: Run copy docker compose file to virtual machine
       run: |
         echo "try copy docker compose file to virtual machien through ssh "
+        ls -la
         
 
     
