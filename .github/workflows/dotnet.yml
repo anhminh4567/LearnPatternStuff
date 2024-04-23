@@ -142,6 +142,7 @@ jobs:
     environment: ${{ inputs.environment_to_deploy }} 
     env:
       DEPLOYMENT_PATH: 'E:\DEPLOYMENT\GITHUB'
+      DOCKER_COMPOSE_HOST_PATH: '/tmp/docker-compose.yml'
     steps:
     - name: validate if directory can be accessed and create a dummy file
       run : |
@@ -165,6 +166,10 @@ jobs:
       run: |
         echo "try copy docker compose file to virtual machien through ssh "
         ls
-        
+        echo "if there is docker-compose.yml file, then good to go"
+        scp -i `
+        ${{ secrets.VM_SSH_KEY_PATH }} `
+        "${{ github.workspace }}\docker-compose.yml" `
+        ${{ secrets.VM_INSTANCE_ADDRESS }}:${{ env.DOCKER_COMPOSE_HOST_PATH }}
 
     
