@@ -3,8 +3,9 @@ name: testing_docker_compose
 networks:
   myapp_compose_network:
 
-volumes:
+volumes: 
   mydb_compose_volume:
+
 
 services:
   mydb:
