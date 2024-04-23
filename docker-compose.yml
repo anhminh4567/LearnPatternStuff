@@ -29,12 +29,13 @@ services:
       - "MYAPP_UID=SA"
       - "MYAPP_PWD=Supermarcy@2003"
       - "MYAPP_DATABASE=LearnCSharpEFCore"
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     build:
       context: .
       dockerfile: TestConceptPattern/Dockerfile
     ports:
       - "7777:80"
-      #- "7778:443"
     networks: 
       - myapp_compose_network
   
