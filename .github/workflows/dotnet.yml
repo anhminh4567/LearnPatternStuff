@@ -97,6 +97,10 @@ jobs:
           mkdir $publishPath
         }
         "PUBLISH_OUTPUT_DIRECTORY=$publishPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4.0.0
+      with:
+        dotnet-version: '7.0.x'
     - name: print some variable
       run: |
         echo "github workspace: $env:GITHUB_WORKSPACE"
