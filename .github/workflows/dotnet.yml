@@ -103,7 +103,10 @@ jobs:
         echo "github workspace: $env:GITHUB_WORKSPACE"
         echo "output of build directory: $env:PUBLISH_OUTPUT_DIRECTORY"
         echo "finish printing"
-         
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4.0.0
+      with:
+         dotnet-version: '7.0.315'
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
