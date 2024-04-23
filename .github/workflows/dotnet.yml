@@ -154,7 +154,10 @@ jobs:
         file: ./TestConceptPattern/Dockerfile
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/cicd_artifact_${{ vars.CURRENT_ENVIRONMENT }}:run_no_${{ github.run_number }}
-        
+
+    - name: Run copy docker compose file to virtual machine
+      run: |
+        echo "try copy docker compose file to virtual machien through ssh "
         
 
     
