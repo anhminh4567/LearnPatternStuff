@@ -164,7 +164,7 @@ jobs:
     - name: Run copy docker compose file to virtual machine
       run: |
         echo "try copy docker compose file to virtual machien through ssh "
-        ls -a
+        ls
         
 
     
