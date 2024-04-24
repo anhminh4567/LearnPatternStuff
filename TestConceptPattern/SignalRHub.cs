@@ -20,8 +20,10 @@ namespace TestConceptPattern
 		}
 		public Task SendAsync(string data) 
 		{
+			var httpContext = Context.GetHttpContext();
 			Console.WriteLine(data + ":		"+ _counter + "			ConnectionId:	" + Context.ConnectionId +"		" + Context.UserIdentifier	);
 			_counter++;
+			Clients.All.SendAsync("ReceiveMessage", "get it with counter: "+ _counter);
 			return Task.CompletedTask;
 		}
 	}

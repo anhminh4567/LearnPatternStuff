@@ -14,7 +14,7 @@ namespace TestConceptPattern.Pages
 
 		public void OnGet()
 		{
-
+			var httpContext = HttpContext;
 		}
 	}
 }

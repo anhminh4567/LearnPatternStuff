@@ -1,8 +1,30 @@
 ﻿@page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+	ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+<script src="./lib/SignalR/signalr.min.js"> </script>
+<script>
+	const connection = new signalR.HubConnectionBuilder()
+		.withUrl("/signalR")
+		.configureLogging(signalR.LogLevel.Information)
+		.build();
+
+    connection.start().then(function () {
+        console.log("Connection established");
+        // Call the SendAsync method every 1 second
+        setInterval(function () {
+            connection.invoke("SendAsync", "Hello from client").catch(function (err) {
+                return console.error(err.toString());
+            });
+        }, 1000);
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+    connection.on("ReceiveMessage", function (message) {
+        console.log("Message received from server:", message);
+    });
+</script>
